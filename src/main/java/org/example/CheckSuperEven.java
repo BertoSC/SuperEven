@@ -9,11 +9,27 @@ public class CheckSuperEven implements Callable {
     private Number num;
     private ExecutorService pool;
 
-    public CheckSuperEven (Number i){
+    public CheckSuperEven (Number i) {
         this.num=i;
         this.pool= Executors.newFixedThreadPool(2);
     }
 
+    @Override
+    public Number call() throws Exception {
+        char[] number = String.valueOf(num.getNum()).toCharArray();
+        for (char c : number) {
+            Future<Boolean> b = pool.submit(new CheckEven(Character.getNumericValue(c)));
+            boolean res = b.get();
+            if (!res) {
+                num.setSupereven(false);
+            }
+        }
+
+        pool.shutdown();
+        return num;
+    }
+
+    /*
     @Override
     public String call() throws Exception {
         char[] number = String.valueOf(num.getNum()).toCharArray();
@@ -22,9 +38,10 @@ public class CheckSuperEven implements Callable {
             boolean res = b.get();
 
             if (!res) {
-                    num.setSupereven(false);
-                }
+               num.setSupereven(false);
             }
+        }
+
 
         String result;
 
@@ -35,7 +52,9 @@ public class CheckSuperEven implements Callable {
         }
 
         pool.shutdown();
-
         return result;
     }
+
+     */
+
 }

@@ -25,6 +25,6 @@ public class Number {
     }
 
     public void setSupereven(boolean even) {
-        this.supereven.set(even);
+        this.supereven.getAndSet(even);
     }
 }
